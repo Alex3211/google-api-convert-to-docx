@@ -5,3 +5,5 @@ package-lock.json
 testDoc.docx
 dist
 .env
+last-document.docx
+document.docx

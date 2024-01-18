@@ -17,16 +17,26 @@
 <body>
   <input type="file" id="file" style="display:none;" />
   <button id="button" name="button" value="Upload" onclick="handleUploadFile();">Upload</button>
+  <div id="loader" class="lds-ring">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </body>
 
 </html>
 <script>
+
   function handleUploadFile() {
     document.getElementById("file").click();
   };
   $(document).ready(async function () {
+    $('#loader')[0].style.display = 'none';
     let html = '';
     $("#file").on('change', async function (e) {
+      $('#loader')[0].style.display = 'initial';
+      $('#button')[0].style.display = 'none';
       console.dir(e)
       var file = $("#file")[0].files[0];
       if (file) {
@@ -34,12 +44,38 @@
         await reader.readAsText(file, "UTF-8");
         reader.onload = async function (evt) {
           html = evt.target.result;
-          const result = await axios.post('http://localhost:3333', { html }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
+          const result = await axios.post(
+            'http://localhost:3333',
+            {
+              html,
+              documentRequest: {
+                // DO NOT PUT EMPTY PROPERTIES LIKE THIS
+                // BUT writeControl EXIST, YOU CAN SEE MORE HERE IN THE DOC
+                // https://developers.google.com/docs/api/reference/rest/v1/documents/batchUpdate
+                // writeControl: {
+                //   requiredRevisionId: "",
+                //   targetRevisionId: ""
+                // }
+                requests: [{
+                  updateSectionStyle: {
+                    sectionStyle: {
+                      marginLeft: { unit: 'PT', magnitude: 0 },
+                      marginRight: { unit: 'PT', magnitude: 0 },
+                      marginTop: { unit: 'PT', magnitude: 0 },
+                      marginBottom: { unit: 'PT', magnitude: 0 }
+                    },
+                    fields: 'marginLeft,marginRight,marginTop,marginBottom'
+                  }
+                }],
+              }
             },
-            responseType: 'blob'
-          })
+            {
+              // ONLY ON application/x-www-form-urlencoded, FOR THE MOMENT
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              responseType: 'blob'
+            })
           var fileName = 'document.docx'
           var a = document.createElement("a");
           document.body.appendChild(a);
@@ -50,11 +86,67 @@
           a.click();
           window.URL.revokeObjectURL(url);
           console.dir(result)
+          $('#loader')[0].style.display = 'none';
+          $('#button')[0].style.display = 'initial';
+          return true;
         }
         reader.onerror = function (evt) {
+          console.dir(evt)
+          return false;
         }
       }
     });
   });
 
 </script>
+<style>
+  body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #aa2222;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #aa2222 transparent transparent transparent;
+  }
+
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
