@@ -1,2 +1,2 @@
 # google-api-html-to-docx
-html to docx conversion with google api (gdrive -> gdoc)
+html to docx convert with google api (gdrive -> gdoc)
