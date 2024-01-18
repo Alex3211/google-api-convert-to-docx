@@ -92,7 +92,7 @@ async function Startup(auth) {
   console.log('CREATED GDRIVE')
   console.log(creation.data)
 
-  // Mandatory because update trigger the conversion at google
+  // Mandatory because update trigger the convert of the file at google server
   const update = await drive.files.update({
     fileId: creation.data.id,
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
