@@ -1,0 +1,32 @@
+{
+  "name": "google-api-html-to-docx",
+  "version": "1.0.0",
+  "description": "html to docx via google api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex3211/google-api-html-to-docx.git"
+  },
+  "keywords": [
+    "html",
+    "to",
+    "docx",
+    "google",
+    "api"
+  ],
+  "author": "Martin Router King",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Alex3211/google-api-html-to-docx/issues"
+  },
+  "homepage": "https://github.com/Alex3211/google-api-html-to-docx#readme",
+  "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
+    "googleapis": "^131.0.0",
+    "nodemon": "^3.0.3"
+  }
+}
