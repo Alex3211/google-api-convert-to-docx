@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 const { Readable } = require('stream');
-import fs from 'fs';
 import { docs_v1 } from 'googleapis';
 import { ConvertHtmlToDocx } from "./Service/googleService";
 

@@ -5,7 +5,6 @@ import fs from 'fs';
 
 import helmet from 'helmet';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 
 import { googleRouter } from './router'
 
@@ -19,8 +18,8 @@ app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 app.route("/").get((req: Request, res: Response) => {
-  fs.readFile('./index.html', 'utf8', (err, text) => {
-    // pour le cross origin
+  fs.readFile('./src/Html/index.html', 'utf8', (err, text) => {
+    // pour le cross origin sur la page de testing ( ./ ) - supprimer cet endpoint en production
     res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
       .send(text);
   });
