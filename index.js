@@ -93,6 +93,7 @@ async function Startup(auth) {
   console.log(creation.data)
 
   // Mandatory because update trigger the convert of the file at google server
+  // usefull to apply css etc, but not working at 100%
   const update = await drive.files.update({
     fileId: creation.data.id,
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
