@@ -149,7 +149,6 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
   )
 
   await fsp.writeFile(process.cwd() + '/archive/last-document.docx', buffer); // DEBUG
-
   console.log('SAVED LOCALLY')
 
   await drive.files.delete(
