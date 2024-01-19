@@ -22,8 +22,8 @@ const SCOPES = ['https://www.googleapis.com/auth/documents', 'https://www.google
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = path.join(process.cwd() + 'src/GoogleAuthentication', 'token.json');
-const CREDENTIALS_PATH = path.join(process.cwd() + 'src/GoogleAuthentication', 'credentials.json');
+const TOKEN_PATH = path.join(process.cwd() + '/src/GoogleAuthentication', 'token.json');
+const CREDENTIALS_PATH = path.join(process.cwd() + '/src/GoogleAuthentication', 'credentials.json');
 
 /**
  * Reads previously authorized credentials from the save file.
@@ -149,7 +149,7 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
     await data.data.arrayBuffer()
   )
 
-  await fsp.writeFile(process.cwd() + './archive/last-document.docx', buffer); // DEBUG
+  await fsp.writeFile(process.cwd() + '/archive/last-document.docx', buffer); // DEBUG
 
   console.log('SAVED LOCALLY')
 
