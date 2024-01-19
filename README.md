@@ -30,7 +30,7 @@ to customize request use https://developers.google.com/docs/api/reference/rest/v
 
 This api use `application/x-www-form-urlencoded`
 
-```json
+```js
 const result = await axios.post(
   'http://localhost:3333',
   {
