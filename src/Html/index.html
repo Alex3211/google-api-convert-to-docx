@@ -43,10 +43,11 @@
         var reader = new FileReader();
         await reader.readAsText(file, "UTF-8");
         reader.onload = async function (evt) {
-          html = evt.target.result;
+          html = evt.target.result.replace(`/\s{2,}/g`, ' ').replace(`/\'/g`, `"`);
           const result = await axios.post(
             'http://localhost:3333',
             {
+              console,
               html,
               documentRequest: {
                 // DO NOT PUT EMPTY PROPERTIES LIKE THIS

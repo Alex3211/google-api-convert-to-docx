@@ -87,7 +87,6 @@ async function SetUpdocumentRequestsDoc(docId, Docs: docs_v1.Docs, documentReque
 
   // @ts-ignore
   const obj = (await Docs.documents.get({ documentId: docId, fields: "body(content(sectionBreak,startIndex,endIndex))" })).data.body.content;
-  console.dir(obj)
   // @ts-ignore
   const section = obj[sectionNumber - 1];
   if (!section) {
