@@ -22,7 +22,7 @@ https://developers.google.com/drive/api/guides/about-sdk?hl=fr
 | TYPE   | ENDPOINT                            | DESCRIPTION         | BODY                                                                    |
 | ------ | ----------------------------------- | ------------------- | ----------------------------------------------------------------------- |
 | GET    | `/`  | index.html example page | none                                                     |
-| POST   | `/`  | Convert html to docx | {html : string, documentRequest :}                                                     |
+| POST   | `/`  | Convert html to docx | {html : string, documentRequest }                                                     |
 
 to customize request use https://developers.google.com/docs/api/reference/rest/v1/documents/request?hl=fr
 

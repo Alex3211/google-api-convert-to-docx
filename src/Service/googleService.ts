@@ -81,7 +81,7 @@ async function authorize(file: string) {
 
 
 // @ts-ignore
-async function SetUpdocumentRequestsDoc(docId, Docs: docs_v1.Docs, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) {
+async function SetUpDocumentRequests(docId, Docs: docs_v1.Docs, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) {
   console.dir(documentRequests)
   const sectionNumber = 1; // 1 is the first section.
 
@@ -125,7 +125,7 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
     }
   });
   console.log('CREATED GDRIVE')
-  if (documentRequests !== undefined) await SetUpdocumentRequestsDoc(creation.data.id, docs, documentRequests);
+  if (documentRequests !== undefined) await SetUpDocumentRequests(creation.data.id, docs, documentRequests);
 
   // Mandatory because update trigger the conversion at google
   const update = await drive.files.update(
