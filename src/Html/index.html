@@ -37,63 +37,52 @@
     $("#file").on('change', async function (e) {
       $('#loader')[0].style.display = 'initial';
       $('#button')[0].style.display = 'none';
-      console.dir(e)
       var file = $("#file")[0].files[0];
       if (file) {
-        var reader = new FileReader();
-        await reader.readAsText(file, "UTF-8");
-        reader.onload = async function (evt) {
-          html = evt.target.result.replace(`/\s{2,}/g`, ' ').replace(`/\'/g`, `"`);
-          const result = await axios.post(
-            'http://localhost:3333',
-            {
-              html,
-              documentRequest: {
-                // DO NOT PUT EMPTY PROPERTIES LIKE THIS
-                // BUT writeControl EXIST, YOU CAN SEE MORE HERE IN THE DOC
-                // https://developers.google.com/docs/api/reference/rest/v1/documents/batchUpdate
-                // writeControl: {
-                //   requiredRevisionId: "",
-                //   targetRevisionId: ""
-                // }
-                requests: [{
-                  updateSectionStyle: {
-                    sectionStyle: {
-                      marginLeft: { unit: 'PT', magnitude: 0 },
-                      marginRight: { unit: 'PT', magnitude: 0 },
-                      marginTop: { unit: 'PT', magnitude: 0 },
-                      marginBottom: { unit: 'PT', magnitude: 0 }
-                    },
-                    fields: 'marginLeft,marginRight,marginTop,marginBottom'
-                  }
-                }],
+        var formData = new FormData();
+        formData.append("file", new File([file], 'filename.' + file.name.split('.').pop(), { type: file.type }));
+        formData.append("options", JSON.stringify({
+          documentRequest: {
+            // DO NOT PUT EMPTY PROPERTIES LIKE THIS
+            // BUT writeControl EXIST, YOU CAN SEE MORE HERE IN THE DOC
+            // https://developers.google.com/docs/api/reference/rest/v1/documents/batchUpdate
+            // writeControl: {
+            //   requiredRevisionId: "",
+            //   targetRevisionId: ""
+            // },
+            requests: [{
+              updateSectionStyle: {
+                sectionStyle: {
+                  marginLeft: { unit: 'PT', magnitude: 0 },
+                  marginRight: { unit: 'PT', magnitude: 0 },
+                  marginTop: { unit: 'PT', magnitude: 0 },
+                  marginBottom: { unit: 'PT', magnitude: 0 }
+                },
+                fields: 'marginLeft,marginRight,marginTop,marginBottom'
               }
-            },
-            {
-              // ONLY ON application/x-www-form-urlencoded, FOR THE MOMENT
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-              },
-              responseType: 'blob'
-            })
+            }],
+          }
+        }))
+        axios.post('http://localhost:3333', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          responseType: 'blob'
+        }).then(async e => {
+          var reader = new FileReader();
+          await reader.readAsText(file, "UTF-8");
           var fileName = 'document.docx'
           var a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
-          var url = window.URL.createObjectURL(result.data);
+          var url = window.URL.createObjectURL(e.data);
           a.href = url;
           a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
-          console.dir(result)
           $('#loader')[0].style.display = 'none';
           $('#button')[0].style.display = 'initial';
-          return true;
-        }
-        reader.onerror = function (evt) {
-          console.dir(evt)
-          return false;
-        }
+        })
       }
     });
   });

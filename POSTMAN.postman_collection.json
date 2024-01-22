@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "9245eb65-86df-40e0-8b69-7d5a26eb741c",
-		"name": "google-api-html-to-docx",
+		"name": "google-api-convert-to-docx",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

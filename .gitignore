@@ -6,4 +6,6 @@ testDoc.docx
 dist
 .env
 last-document.docx
+last-document.html
+last-document.pdf
 document.docx

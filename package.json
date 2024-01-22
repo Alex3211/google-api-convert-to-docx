@@ -1,5 +1,5 @@
 {
-  "name": "google-api-html-to-docx",
+  "name": "google-api-convert-to-docx",
   "version": "1.0.0",
   "description": "html to docx via google api",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Alex3211/google-api-html-to-docx.git"
+    "url": "git+https://github.com/Alex3211/google-api-convert-to-docx.git"
   },
   "keywords": [
     "html",
@@ -21,22 +21,24 @@
   "author": "Martin Router King",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Alex3211/google-api-html-to-docx/issues"
+    "url": "https://github.com/Alex3211/google-api-convert-to-docx/issues"
   },
-  "homepage": "https://github.com/Alex3211/google-api-html-to-docx#readme",
+  "homepage": "https://github.com/Alex3211/google-api-convert-to-docx#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "googleapis": "^131.0.0",
     "helmet": "^7.1.0",
+    "multer": "^1.4.5-lts.1",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3",
-    "ts-node": "^10.9.2",
     "@google-cloud/local-auth": "^3.0.1",
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21"
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
+    "nodemon": "^3.0.3",
+    "ts-node": "^10.9.2"
   }
 }

@@ -6,7 +6,7 @@ import { docs_v1, google } from 'googleapis';
 import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
 const fsp = fs.promises;
 import crypto from 'crypto';
-
+const { Readable } =  require('stream')
 /*
 --- MORE INFO HERE ---
 -- DOCS --
@@ -63,7 +63,7 @@ async function saveCredentials(client: JSONClient | null) {
  * Load or request or authorization to call APIs.
  *
  */
-async function authorize(file: string) {
+async function authorize() {
   let client = await loadSavedCredentialsIfExist();
   if (client) {
     return client;
@@ -75,11 +75,24 @@ async function authorize(file: string) {
   if (client.credentials) {
     await saveCredentials(client);
   }
-  return { client, file };
+  return { client };
 }
 
-
-
+/**
+ * Sets up document requests by updating section ranges 
+ * 
+ * This function prepares batch update requests for a Google Doc 
+ * by retrieving section metadata and updating the ranges in 
+ * the requests to match actual section boundaries.
+ *
+ * @param {string} docId - The ID of the Google Doc document 
+ * @param {docs_v1.Docs} Docs - Google Docs API client instance
+ * @param {docs_v1.Schema$BatchUpdateDocumentRequest} documentRequests - Requests to update document sections
+ * 
+ * @throws {Error} If the requested section cannot be found
+ * 
+ * @returns {Promise} Resolves once batch update is complete
+*/
 // @ts-ignore
 async function SetUpDocumentRequests(docId, Docs: docs_v1.Docs, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) {
   console.dir(documentRequests)
@@ -106,13 +119,13 @@ async function SetUpDocumentRequests(docId, Docs: docs_v1.Docs, documentRequests
  * https://docs.google.com/document/d/195j9eDD3ccgjQRttHhJPymLJUCOUjs-jmwTrekvdjFE/edit
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth 2.0 client.
  */
-async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) {
+async function Startup(auth: any, file: Express.Multer.File, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) {
+  console.log('STARTUP')
   const docs = google.docs({ version: 'v1', auth });
   const drive = google.drive({
     version: 'v3',
-    auth: auth
+    auth: auth,
   });
-
   const creation = await drive.files.create({
     requestBody: {
       parents: [`${process.env.FOLDER_ID}`],
@@ -120,8 +133,8 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
       mimeType: 'application/vnd.google-apps.document'
     },
     media: {
-      mimeType: 'text/html',
-      body: file
+      mimeType: file.mimetype,
+      body: Readable.from(file.buffer)
     }
   });
   console.log('CREATED GDRIVE')
@@ -147,8 +160,7 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
     // @ts-ignore
     await data.data.arrayBuffer()
   )
-
-  await fsp.writeFile(process.cwd() + '/archive/last-document.docx', buffer); // DEBUG
+  await fsp.writeFile(process.cwd() + '/archive/last-document' + '.docx', buffer); // DEBUG
   console.log('SAVED LOCALLY')
 
   await drive.files.delete(
@@ -160,9 +172,9 @@ async function Startup(auth: any, file: string, documentRequests: docs_v1.Schema
   return buffer;
 }
 
-export const ConvertHtmlToDocx =
-  async (file: string, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) =>
-    await authorize(file)
+export const ConvertFileToDocx =
+  async (file: Express.Multer.File, documentRequests: docs_v1.Schema$BatchUpdateDocumentRequest) =>
+    await authorize()
       .then(
         (e) => Startup(e, file, documentRequests)
-      ).catch(console.error);
+      ).catch(console.dir);
